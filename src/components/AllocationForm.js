@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 
 const AllocationForm = (props) => {
-    const { dispatch, remaining } = useContext(AppContext)
+    const { dispatch, remaining, currency } = useContext(AppContext)
 
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
@@ -33,6 +33,14 @@ const AllocationForm = (props) => {
         }
     }
 
+    const validateCost = (event) => {
+        if (event.target.validity.valid || event.target.validity.valueMissing) {
+            setCost(event.target.value)
+        } else {
+            setCost(cost)
+        }
+    }
+
     return (
         <div>
             <div className='row'>
@@ -56,20 +64,23 @@ const AllocationForm = (props) => {
                         <option defaultValue value="Add" name="Add">Add</option>
                         <option value="Reduce" name="Reduce">Reduce</option>
                     </select>
-                    <input
-                        required='required'
-                        type='number'
-                        id='cost'
-                        value={cost}
-                        style={{ marginLeft: '2rem', size: 10 }}
-                        onChange={(event) => setCost(event.target.value)}>
-                    </input>
+                    <div className="mx-4 d-flex flex-row justify-content-center">
+                        <span className='align-self-center mx-1' style={{ fontSize: "1.2rem" }}>{currency}</span>
+                        <input
+                            required='required'
+                            type='number'
+                            id='cost'
+                            value={cost}
+                            style={{ size: 10 }}
+                            onChange={(event) => validateCost(event)}>
+                        </input>
+                    </div>
                     <button className="btn btn-primary" onClick={submitEvent} style={{ marginLeft: '2rem' }}>
                         Save
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
